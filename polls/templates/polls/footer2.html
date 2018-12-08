@@ -1,0 +1,70 @@
+
+<script
+  src="https://code.jquery.com/jquery-3.3.1.min.js"
+  integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
+  crossorigin="anonymous"></script>
+<!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
+ --><script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
+
+ <!-- Icons -->
+    <script src="https://unpkg.com/feather-icons/dist/feather.min.js"></script>
+    <script>
+      feather.replace()
+    </script>
+
+
+   
+<script>
+  //for getting CSRF token
+function getCookie(name){
+  var cookieValue=null;
+    if(document.cookie && document.cookie !=''){
+      var cookies = document.cookie.split(';');
+      for(var i=0;i<cookies.length;i++){
+        var cookie = jQuery.trim(cookies[i]);
+
+      
+      if(cookie.substring(0,name.length+1)==(name+'=')){
+        cookieValue=decodeURIComponent(cookie.substring(name.length+1));
+        break;
+      }}
+    }
+  return cookieValue;
+}
+
+//when submit is clicked
+$("#submit").click(function(e){
+  e.preventDefault();
+
+  //prepare csrf token
+  var csrftoken = getCookie('csrftoken');
+
+  //collect data from fields
+  var email = $('#inputEmail').val();
+  var password = $('#inputPassword').val();
+
+  $.ajax({
+    //url: window.location.href,
+    url: "{% url 'polls:home' %}",
+    type: "POST",
+    data:{csrfmiddlewaretoken: csrftoken,
+      email:email,
+      password:password
+    },
+    success: function(json){
+      console.log(json);
+      alert('Hi ' + json['email']+'!.'+' you have entered password '+json['password']);
+      console.log("success");
+    },
+    error:function(xhr,errmsg,err){
+      console.log(xhr.status + ": "+xhr.responseText);
+    }
+  });
+
+
+});
+
+
+</script>
+
+</body></html>
