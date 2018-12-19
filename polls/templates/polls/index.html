@@ -6,87 +6,156 @@
 
 
 <div class="container-fluid">
-     <div class="row">
-        
-      {% include 'polls/left-nav.html' %}
+ <div class="row">
 
-        <main role="main" class="col-md-9 ml-sm-auto col-lg-10 px-4">
-          <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
-            <h1 class="h2">Dashboard</h1>
-            
-            <div class="btn-toolbar mb-2 mb-md-0">
-              <div class="btn-group mr-2">
-                <button class="btn btn-sm btn-outline-secondary">Share</button>
-                <button class="btn btn-sm btn-outline-secondary">Export</button>
-              </div>
-              <button class="btn btn-sm btn-outline-secondary dropdown-toggle">
-                <span data-feather="calendar"></span>
-                This week
-              </button>
+  {% include 'polls/left-nav.html' %}
+
+  <main role="main" class="col-md-9 ml-sm-auto col-lg-10 px-4">
+    <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+      <h1 class="h2">Dashboard</h1>
+
+      <div class="btn-toolbar mb-2 mb-md-0">
+        <div class="btn-group mr-2">
+          <button class="btn btn-sm btn-outline-secondary">Share</button>
+          <button class="btn btn-sm btn-outline-secondary">Export</button>
+        </div>
+        <button id="toggle-one" class="btn btn-sm btn-outline-secondary dropdown-toggle">
+          <span data-feather="calendar"></span>
+          This week
+        </button>
+      </div>
+    </div>
+
+    <div class="row"><!-- Weather data panel -->
+      <div class="col">
+        <div style="text-align: center;">
+          <h5>Currently in</h5>
+          <h3>{{city }}</h3>
+          <h4>{{ temperature_in_f| floatformat }} F | {{ temperature_in_c }}</h4>
+          <h4>{{ description }}</h4>
+          <p><em>Last Updated {{ utc_update_time }} PST</em></p>
+        </div>
+      </div>
+    </div><!-- #Weather data panel -->
+
+    <div class="row"><!-- Station panel -->
+      <div class="col">
+
+        <div class="card" style="width: 25rem;">
+          <!-- <img class="card-img-top" src="..." alt="Card image cap"> -->
+          <div class="card-body">
+            <form class="form-signin" method="POST" >
+             {% csrf_token %}
+             <div class="form-group" >
+              <h5 class="card-title">Station 1</h5>
+              <p class="card-text">werfpoj wer ipjg peork </p>
+              <!-- <button type="button" id="stn1" class="btn btn-danger">Off</button> -->
+              <input id="stn1" type="checkbox" data-toggle="toggle" data-onstyle="success" data-offstyle="danger">
             </div>
+          </form>
+        </div>
+      </div>
+    </div>
+
+    <div class="col">
+      <div class="card" style="width: 25rem;">
+        <!-- <img class="card-img-top" src="..." alt="Card image cap"> -->
+        <div class="card-body">
+
+         <form class="form-signin" method="POST" >
+           {% csrf_token %}
+           <div class="form-group">
+            <h5 class="card-title">Station 2</h5>
+            <p class="card-text">werfpoj wer ipjg peork </p>
+            <!-- <button type="button" id="stn2" class="btn btn-danger">Off</button> -->
+            <input id="stn2" type="checkbox" data-toggle="toggle" data-onstyle="success" data-offstyle="danger">
           </div>
-          <div class="row"><!-- Station panel -->
-		 		<div class="col">
-		 			<form class="form-signin" method="POST" >
-		 				{% csrf_token %}
-			 			<div class="form-group" >
-			 				<h3>Station 1</h3>
-			 				<p>werfpoj wer ipjg peork </p>
-			 				<button type="button" id="stn1" class="btn btn-danger">Off</button>
-			 			</div>
-			 			<h2 class="form-signin-heading">Enter Details</h2>
-     <label for="inputEmail" class="sr-only">Email address</label>
-     <input type="email" id="inputEmail" class="form-control" placeholder="Email               address" required autofocus>
-     <label for="inputPassword" class="sr-only">Password</label>
-     <input type="password" id="inputPassword" class="form-control"  placeholder="Password" required>
-     <button id="submit" class="btn btn-lg btn-primary btn-block" type="submit">Sign in</button>
-		 			</form>
-		 		</div>
-		 		<div class="col">
-		 			<form method="post">
-		 				
-		 				<div class="form-group">
-			 				<h3>Station 2</h3>
-			 				<p>werfpoj wer ipjg peork </p>
-			 				<button type="button" id="stn2" class="btn btn-danger">Off</button>
-			 			</div>
-		 			</form>
-		 		</div>
-	 	    </div><!--#station panel-->
-	 	   <br>
-          <h2>Water Usage</h2>
-          <canvas class="my-4 w-100" id="myChart" width="900" height="380"></canvas>
+        </form>
+      </div>
+    </div>
+  </div>
+</div><!--#station panel-->
 
-          <h2>Poll Questions</h2>
-          <div class="table-responsive">
-            {% if latest_question_list %}
-            <table class="table table-striped table-sm">
-              <thead>
-                <tr>
-                  <th>#</th>
-                 
-                </tr>
-              </thead>
-              <tbody>
-              	{% for question in latest_question_list %}
-                <tr>
-                	<td>
-						<a href={% url 'polls:detail' question.id %}>{{question.question_text }}</a>
-					</td>
-                </tr>
-                {% endfor %}
-              </tbody>
-            </table>
-            {% else %}
-			<p>No polls are available.</p>
-			{% endif %}
-          </div>
-			
-        </main>
+<br>
+<div class="card" >
+  <!-- <img class="card-img-top" src="..." alt="Card image cap"> -->
+  <div class="card-body">
+    <h2 class="card-title">Schedule</h2>
+    <div class="row">
+      <div class='col-sm-6' id="start-time" >
+        <div class="md-form">
+          <input placeholder="Selected time" name="timepicker" type="text" id="input_starttime" class="timepicker">
+          <label class="card-text" for="input_starttime">Start Time</label>
+        </div>
+      </div>
+      <div class="card-text" class='col-sm-6' id="duration">
+        Duration
+      </div>
+    </div>
+    <div class="row">
+      <div class='col-sm' id="day-of-week" >
+        <div class='btn-group col-sm' data-toggle="buttons">
+          <label class="btn btn-mdb-color form-check-label">
+            <input class="form-check-input" type="checkbox" autocomplete="off">Sun
+          </label>
+          <label class="btn btn-mdb-color form-check-label">
+            <input class="form-check-input" type="checkbox" autocomplete="off">Mon
+          </label>
+          <label class="btn btn-mdb-color form-check-label">
+            <input class="form-check-input" type="checkbox" autocomplete="off">Tues
+          </label>
+          <label class="btn btn-mdb-color form-check-label">
+            <input class="form-check-input" type="checkbox" autocomplete="off">Wed
+          </label>
+          <label class="btn btn-mdb-color form-check-label">
+            <input class="form-check-input" type="checkbox" autocomplete="off">Thurs
+          </label>
+          <label class="btn btn-mdb-color form-check-label">
+            <input class="form-check-input" type="checkbox" autocomplete="off">Fri
+          </label>
+          <label class="btn btn-mdb-color form-check-label">
+            <input class="form-check-input" type="checkbox" autocomplete="off">Sat
+          </label>
+        </div>
+      </div>
+      </div>
+    </div>
+  </div>
 
- 	</div><!--#row-->
+  <br>
+  <h2>Water Usage</h2>
+  <canvas class="my-4 w-100" id="myChart" width="900" height="380"></canvas>
 
- </div><!--#container-fluid-->
+  <h2>Poll Questions</h2>
+  <div class="table-responsive">
+    {% if latest_question_list %}
+    <table class="table table-striped table-sm">
+      <thead>
+        <tr>
+          <th>#</th>
+
+        </tr>
+      </thead>
+      <tbody>
+       {% for question in latest_question_list %}
+       <tr>
+         <td>
+          <a href={% url 'polls:detail' question.id %}>{{question.question_text }}</a>
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+  {% else %}
+  <p>No polls are available.</p>
+  {% endif %}
+</div>
+
+</main>
+
+</div><!--#row-->
+
+</div><!--#container-fluid-->
 
 
 

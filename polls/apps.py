@@ -5,4 +5,9 @@ from django.apps import AppConfig
 
 
 class PollsConfig(AppConfig):
-    name = 'polls'
+	name = 'polls'
+
+	def ready(self):
+		print "at polls config"
+		from polls.forecastUpdater import updater	
+		updater.start()

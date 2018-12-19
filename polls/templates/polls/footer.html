@@ -1,7 +1,7 @@
 
 
 
-
+{% load static %}
 
 <script
   src="https://code.jquery.com/jquery-3.3.1.min.js"
@@ -9,6 +9,23 @@
   crossorigin="anonymous"></script>
 <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
  --><script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
+
+<script src="https://gitcdn.github.io/bootstrap-toggle/2.2.2/js/bootstrap-toggle.min.js"></script>
+
+<!-- MDB core JavaScript -->
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mdbootstrap/4.5.15/js/mdb.min.js"></script>
+
+
+<!-- Propeller textfield js --> 
+<script type="text/javascript" src="dist/js/propeller.min.js"></script>
+
+<!-- Datepicker moment with locales -->
+<script type="text/javascript" language="javascript" src="datetimepicker/js/moment-with-locales.js"></script>
+
+<!-- Propeller Bootstrap datetimepicker -->
+<script type="text/javascript" language="javascript" src="datetimepicker/js/bootstrap-datetimepicker.js"></script>
+
+<script type="text/javascript" src={% static "/polls/wickedpicker/dist/wickedpicker.min.js" %}></script>
 
  <!-- Icons -->
     <script src="https://unpkg.com/feather-icons/dist/feather.min.js"></script>
@@ -79,8 +96,8 @@ $("#submit").click(function(e){
 
   $.ajax({
     //url: window.location.href,
-    url: '{% url 'polls:home' %}',
-    type: "POST",
+    url: '{% url "polls:station" %}',
+    type: 'POST',
     data:{csrfmiddlewaretoken: csrftoken,
       email:email,
       password:password
@@ -91,13 +108,97 @@ $("#submit").click(function(e){
       console.log("success");
     },
     error:function(xhr,errmsg,err){
-      console.log(xhr.status + ": "+xhr.responseText);
+      console.log("error is here: "+xhr.status + ": "+xhr.responseText);
     }
   });
 
 
 });
 
+
+var station1 = $("#stn1");
+var station2 = $("#stn2");
+var stn1Pin = "P8_8";
+var stn2Pin = "P8_9";
+var timeDelay = 3 * (1000);//time in seconds
+
+station1.change(function(e){
+  
+  var switchStatus = false;
+  var csrftoken = getCookie('csrftoken');
+
+  if ($(this).is(':checked')) {
+        switchStatus = $(this).is(':checked');
+        ajaxCall(stn1Pin,1,e,csrftoken);
+
+        //turn off after set amount of time
+        setTimeout(function(){
+        station1.bootstrapToggle('off');
+        ajaxCall(stn1Pin,0,e,csrftoken)},timeDelay);
+    }
+    else {
+        switchStatus = $(this).is(':checked');
+        ajaxCall(stn1Pin,0,e,csrftoken);
+    }
+
+
+});
+
+
+station2.change(function(e){
+ var switchStatus = false;
+ var csrftoken = getCookie('csrftoken');
+
+if ($(this).is(':checked')) {
+       
+        switchStatus = $(this).is(':checked');
+        ajaxCall(stn2Pin,1,e,csrftoken);
+
+        //turn off after set amount of time
+        setTimeout(function(){
+        station2.bootstrapToggle('off');
+        ajaxCall(stn2Pin,0,e,csrftoken)},timeDelay);
+    }
+    else {
+      switchStatus = $(this).is(':checked');      
+      ajaxCall(stn2Pin,0,e,csrftoken);
+    }
+
+});
+
+
+
+function ajaxCall(stn, state,e,csrftoken){
+ e.preventDefault();
+    //var csrftoken = getCookie('csrftoken');
+    $.ajax({
+      url: '{% url "polls:station" %}',
+      type:'POST',
+      data:{csrfmiddlewaretoken : csrftoken,
+        stn:stn,
+        state:state
+      },
+      success: function(json){
+        console.log(json);
+        console.log("success");
+      }
+    });
+
+}
+// $('#input_starttime').pickatime({
+//     // 12 or 24 hour
+//     twelvehour: true,
+// });
+</script>
+
+<script>
+  
+// Time picker only
+  // $('#input_starttime').datetimepicker({
+  //   format: 'LT'
+  // });
+
+  $('.timepicker').wickedpicker();
 
 </script>
 

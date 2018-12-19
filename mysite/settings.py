@@ -31,13 +31,15 @@ ALLOWED_HOSTS = ['192.168.0.109']
 # Application definition
 
 INSTALLED_APPS = [
-    'polls.apps.PollsConfig',
+    
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django_apscheduler',
+    'polls.apps.PollsConfig',
 ]
 
 MIDDLEWARE = [
@@ -119,3 +121,5 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/1.11/howto/static-files/
 
 STATIC_URL = '/static/'
+
+APSCHEDULER_DATETIME_FORMAT =  "N j, Y, f:s a"  # Default
